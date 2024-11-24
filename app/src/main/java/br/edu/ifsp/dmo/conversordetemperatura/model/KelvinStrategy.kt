@@ -1,4 +1,4 @@
-// KelvinStrategy.kt
+
 package br.edu.ifsp.dmo.conversordetemperatura.model
 
 object KelvinStrategy : TemperatureConverter {

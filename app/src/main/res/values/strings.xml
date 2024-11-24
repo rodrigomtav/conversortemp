@@ -9,4 +9,9 @@
     <string name="msgFtoC">Conversão de Fahrenheit para Celsius realizada.</string>
     <string name="msgKtoC">Conversão para Kelvin realizada.</string>
     <string name="error_popup_notify">Não foi possível converter a temperatura com os dados fornecidos.</string>
+    <string-array name="scales">
+        <item>Celsius</item>
+        <item>Fahrenheit</item>
+        <item>Kelvin</item>
+    </string-array>
 </resources>

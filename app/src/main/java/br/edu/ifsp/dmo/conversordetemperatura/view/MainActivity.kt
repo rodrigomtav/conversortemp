@@ -2,7 +2,7 @@ package br.edu.ifsp.dmo.conversordetemperatura.view
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.edu.ifsp.dmo.conversordetemperatura.R
@@ -10,31 +10,32 @@ import br.edu.ifsp.dmo.conversordetemperatura.databinding.ActivityMainBinding
 import br.edu.ifsp.dmo.conversordetemperatura.model.CelsiusStrategy
 import br.edu.ifsp.dmo.conversordetemperatura.model.FahrenheitStrategy
 import br.edu.ifsp.dmo.conversordetemperatura.model.KelvinStrategy
-import br.edu.ifsp.dmo.conversordetemperatura.model.TemperatureConverter
 import kotlin.NumberFormatException
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var converterStrategy: TemperatureConverter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setupSpinners()
         setClickListener()
     }
 
+    private fun setupSpinners() {
+        val scales = resources.getStringArray(R.array.scales)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, scales)
+        binding.spinnerInitialScale.adapter = adapter
+        binding.spinnerTargetScale.adapter = adapter
+    }
+
     private fun setClickListener() {
-        binding.btnCelsius.setOnClickListener {
-            handleConversion(CelsiusStrategy)
+        binding.btnConvert.setOnClickListener {
+            handleConversion()
         }
-        binding.btnFahrenheit.setOnClickListener(View.OnClickListener {
-            handleConversion(FahrenheitStrategy)
-        })
-        binding.btnKelvin.setOnClickListener(View.OnClickListener {
-            handleConversion(KelvinStrategy)
-        })
     }
 
     private fun readTemperature(): Double {
@@ -45,21 +46,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleConversion(strategy: TemperatureConverter) {
-        converterStrategy = strategy
+    private fun handleConversion() {
         try {
             val inputValue = readTemperature()
+            val initialScale = binding.spinnerInitialScale.selectedItem.toString()
+            val targetScale = binding.spinnerTargetScale.selectedItem.toString()
+
+            val result = when (initialScale to targetScale) {
+                "Celsius" to "Fahrenheit" -> FahrenheitStrategy.converter(inputValue)
+                "Celsius" to "Kelvin" -> KelvinStrategy.converter(FahrenheitStrategy.converter(inputValue))
+                "Fahrenheit" to "Celsius" -> CelsiusStrategy.converter(inputValue)
+                "Fahrenheit" to "Kelvin" -> KelvinStrategy.converter(inputValue)
+                "Kelvin" to "Celsius" -> CelsiusStrategy.converter(FahrenheitStrategy.converter(inputValue - 273.15))
+                "Kelvin" to "Fahrenheit" -> FahrenheitStrategy.converter(inputValue - 273.15)
+                else -> inputValue // Mesma escala
+            }
+
             binding.textviewResultNumber.text = String.format(
                 "%.2f %s",
-                converterStrategy.converter(inputValue),
-                converterStrategy.getScale()
+                result,
+                targetScale.first().toString()
             )
-            binding.textviewResultMessage.text = when (this.converterStrategy) {
-                is CelsiusStrategy -> getString(R.string.msgFtoC)
-                is FahrenheitStrategy -> getString(R.string.msgCtoF)
-                is KelvinStrategy -> "Conversão para Kelvin realizada."
-                else -> ""
-            }
         } catch (e: Exception) {
             Toast.makeText(
                 this,

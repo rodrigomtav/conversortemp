@@ -1,12 +1,17 @@
 <resources>
-    <string name="app_name">Convertisseur de Température</string>
-    <string name="temperature">Température :</string>
-    <string name="hint_temperature">Entrez la température</string>
-    <string name="celsius">Celsius</string>
-    <string name="fahrenheit">Fahrenheit</string>
-    <string name="kelvin">Kelvin</string>
-    <string name="msgCtoF">Conversion de Celsius en Fahrenheit effectuée.</string>
-    <string name="msgFtoC">Conversion de Fahrenheit en Celsius effectuée.</string>
-    <string name="msgKtoC">Conversion en Kelvin effectuée.</string>
-    <string name="error_popup_notify">Impossible de convertir la température avec les données fournies.</string>
+    <string name="app_name">Конвертер температуры</string>
+    <string name="temperature">Температура:</string>
+    <string name="hint_temperature">Введите температуру</string>
+    <string name="celsius">Цельсий</string>
+    <string name="fahrenheit">Фаренгейт</string>
+    <string name="kelvin">Кельвин</string>
+    <string name="msgCtoF">Конвертация из Цельсия в Фаренгейт выполнена.</string>
+    <string name="msgFtoC">Конвертация из Фаренгейта в Цельсий выполнена.</string>
+    <string name="msgKtoC">Конвертация в Кельвин выполнена.</string>
+    <string name="error_popup_notify">Невозможно выполнить преобразование температуры с предоставленными данными.</string>
+    <string-array name="scales">
+        <item>Цельсий</item>
+        <item>Фаренгейт</item>
+        <item>Кельвин</item>
+    </string-array>
 </resources>
